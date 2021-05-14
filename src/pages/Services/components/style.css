@@ -1,0 +1,19 @@
+.ant-collapse-header {
+  font-weight: bold;
+  font-size: 18px;
+}
+.ant-collapse-arrow {
+  padding-top: 16px !important;
+}
+
+.ant-collapse-content-box {
+  padding: 0px !important;
+}
+
+.ant-list-item {
+  padding: 16px;
+}
+.ant-list-item:hover {
+  background-color: gainsboro;
+  cursor: pointer;
+}

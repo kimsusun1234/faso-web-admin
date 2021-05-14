@@ -1,0 +1,36 @@
+.nail-header {
+  height: 130px;
+  background: none;
+  text-align: center;
+}
+.nail-header-logo {
+  margin: 0 auto;
+  width: 150px
+}
+.nail-header-slogan {
+  line-height: 1.6;
+  margin: 0 auto;
+}
+.nail-title {
+  font-weight: bold;
+}
+.nail-form {
+  background-color: white;
+  display: block;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 	768px) {
+  .nail-header {
+    height: 100px;
+  }
+  .nail-header-logo {
+    width: 100px
+  }
+  .nail-header-slogan {
+    line-height: 1.5;
+    font-size: smaller;
+  }
+}

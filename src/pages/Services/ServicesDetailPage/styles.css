@@ -1,0 +1,9 @@
+.ant-card-meta-title {
+  font-weight: bold;
+  font-size: 22px;
+}
+.ant-card-meta-description {
+  color: black;
+  font-size: medium;
+  margin-bottom: 16px;
+}
