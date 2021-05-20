@@ -4,6 +4,7 @@ import {
   UserReducer,
   ServiceReducer,
   CategoryReducer,
+  AuthenticationReducer
 } from "../reducers";
 // const reducerMap = {
 //   UserReducer: reducers.UserReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   UserReducer,
   ServiceReducer,
   CategoryReducer,
+  AuthenticationReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

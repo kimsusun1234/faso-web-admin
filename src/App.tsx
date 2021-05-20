@@ -5,11 +5,15 @@ import configureStore from "redux/configuration/configureStore";
 import { PersistGate } from "redux-persist/integration/react";
 import { connect } from "react-redux";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
+import { Switch, Route, BrowserRouter, Redirect, Router } from "react-router-dom";
 import { AdminRouter, AuthenticationRouter } from "routers";
 import { RootState } from "redux/configuration/rootReducer";
 import { ServicesDetailPage } from "pages";
 import UserApiService from "services/UserApiService";
+import { HomeRoute } from "routers/routes";
+import {createBrowserHistory} from 'history'
+
+const history = createBrowserHistory()
 
 interface iProps extends ReturnType<typeof mapStateToProps> {}
 
@@ -23,7 +27,7 @@ class App extends React.Component<iProps> {
   render() {
     return (
       <PersistGate loading={null} persistor={configureStore().persistor}>
-        <BrowserRouter>
+        <Router history={history}>
           <HelmetProvider>
             <Helmet
               titleTemplate="%s - React Boilerplate"
@@ -36,32 +40,31 @@ class App extends React.Component<iProps> {
             </Helmet>
           </HelmetProvider>
           <Switch>
-            {/* {this.props.user ? (
-                <>
-                  <Route exact path="/:path?" component={AdminRouter} />
-                </>
+            <Redirect exact to='/dashboard' from='/' />
+            <Redirect exact to='/' from='/login' />
+            {this.props.user ? (
+                  <Route exact path={HomeRoute.map((element) => element.path)} component={AdminRouter} />
               ) : (
                 <>
-                  <Redirect to="/auth" from="/:path?" />
-                  <Route path="/auth" component={AuthenticationRouter} />
+                  <Route path={['/', '/login']} component={AuthenticationRouter} />
                 </>
-              )} */}
-            <Route
+              )}
+            {/* <Route
               exact
               path="/services/addNew"
               component={ServicesDetailPage}
-            />
+            /> */}
 
-            <Route path="/services/edit/:id" component={ServicesDetailPage} />
-            <Route exact path="/:path?" component={AdminRouter} />
+            {/* <Route path="/services/edit/:id" component={ServicesDetailPage} />
+            <Route exact path="/:path?" component={AdminRouter} /> */}
           </Switch>
-        </BrowserRouter>
+        </Router>
       </PersistGate>
     );
   }
 }
 const mapStateToProps = (state: RootState) => ({
-  user: state.UserReducer.user,
+  user: state.AuthenticationReducer.user,
 });
 
 export default connect(mapStateToProps)(App);

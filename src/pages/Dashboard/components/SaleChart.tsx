@@ -5,7 +5,8 @@ import { I18n, _t, translations } from "utils";
 import { getFakeSaleData } from "utils/fakeData";
 import { lineChartConfig } from "utils/configurations";
 import styles from "./styles";
-import visualizeData from './DataVisualizeHelper'
+import {getOrderChartData} from './DataVisualizeHelper'
+import { setConstantValue } from "typescript";
 
 
 const { Text, Title } = Typography;
@@ -29,14 +30,23 @@ const LineChart = (props: IProps) => {
 
   useEffect(() => {
     getChartData()
-    setTimeout(() => {
-      setData(getFakeSaleData(isMonth));
-    }, 1500);
+    // setTimeout(() => {
+    //   setData(getFakeSaleData(isMonth));
+    // }, 1500);
   }, [isMonth]);
 
   const getChartData = async () => {
-    const result = await visualizeData(isMonth ? 'month' : 'week');
-    console.log(result)
+    const result = await getOrderChartData(isMonth ? 'month' : 'week');
+    //chart format
+    const formated = result.map((element) => {
+      return {
+        day: `${getDayOfWeek(element.date!)} ${element.date?.getDate()}`,
+        value: element.value,
+        amount: element.amount,
+        success: element.success
+      }
+    })
+    setData(formated);
   }
 
   const onSelectChangeHandle = (value: string) => {
@@ -49,18 +59,18 @@ const LineChart = (props: IProps) => {
       onMouseLeave={() => setIsHover(false)}>
       <div>
         <Title level={3} style={styles.chart.title}>
-          {I18n.t(_t(translations.dashboard.lineChartSaleTitle))}
+          Doanh số
         </Title>
         <Select
           defaultValue={mode}
           style={{ float: "right" }}
           onChange={onSelectChangeHandle}
         >
-          <Option value="Week">Week</Option>
-          <Option value="Month">Month</Option>
+          <Option value="Week">Tuần</Option>
+          <Option value="Month">Tháng</Option>
         </Select>
       </div>
-      {renderSubTitle()}
+      {renderSubTitle(isMonth)}
       {renderTotalSale(data)}
       {renderTotalAppointments(data)}
       {renderTotalSuccess(data)}
@@ -69,46 +79,55 @@ const LineChart = (props: IProps) => {
   );
 };
 
-const renderSubTitle = () => (
+const renderSubTitle = (isMonth: boolean) => (
   <Text strong style={styles.chart.sub}>
-    {I18n.t(_t(translations.dashboard.lineChartSaleSubWeek))}
+    {isMonth ? '30 ngày qua' : '7 ngày qua'}
   </Text>
 );
 
 const renderTotalAppointments = (data: Array<any>) => {
   const total = data.reduce(
-    (accumulator, element) => accumulator + element.appointment,
+    (accumulator, element) => accumulator + element.amount,
     0
   );
   return (
-    <Text style={{ ...styles.chart.sub, ...styles.chart.totalAppointment }}>{`${I18n.t(
-      _t(translations.dashboard.lineChartAppointment)
-    )}: ${total}`}</Text>
+    <Text style={{ ...styles.chart.sub, ...styles.chart.totalAppointment }}>{`Tổng số: ${total}`}</Text>
   );
 };
 
 const renderTotalSuccess = (data: Array<any>) => {
-  const total = data.reduce(
-    (accumulator, element) => accumulator + element.appointment,
+  const total: number = data.reduce(
+    (accumulator, element) => accumulator + element.success,
     0
   );
   return (
-    <Text style={{ ...styles.chart.sub, ...styles.chart.totalAppointment }}>{`${I18n.t(
-      _t(translations.dashboard.lineChartConfirm)
-    )}: ${total}`}</Text>
+    <Text style={{ ...styles.chart.sub, ...styles.chart.totalAppointment }}>{`Đơn hàng đã giao: ${total}`}</Text>
   );
 };
 
 const renderTotalSale = (data: Array<any>) => {
-  const total = data.reduce(
+  const total: number= data.reduce(
     (accumulator, element) => accumulator + element.value,
     0
   );
-  return <Title level={1} style={styles.chart.totalSale}>{`${total} VND`}</Title>;
+  return <Title level={1} style={styles.chart.totalSale}>{`${total.toLocaleString()} VND`}</Title>;
 };
 
 
+const getDayOfWeek = (date: Date) => {
 
+  var weekday = new Array(7);
+  weekday[0] = "Sun";
+  weekday[1] = "Mon";
+  weekday[2] = "Tue";
+  weekday[3] = "Wed";
+  weekday[4] = "Thu";
+  weekday[5] = "Fri";
+  weekday[6] = "Sat";
+
+  return weekday[date.getDay()];
+
+}
 
 
 export default LineChart;

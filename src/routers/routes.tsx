@@ -21,7 +21,7 @@ const HomeRoute: IRoute[] = [
     path: "/dashboard",
     component: DashBoard,
   },
-  { key: "Staff", name: "Staff", path: "/staff", component: StaffPage },
+  { key: "User", name: "User", path: "/users", component: StaffPage },
   {
     key: "View Add New Staff",
     name: "View Add New Staff",
@@ -29,9 +29,9 @@ const HomeRoute: IRoute[] = [
     component: StaffDetailPage,
   },
   {
-    key: "Services",
-    name: "Services",
-    path: "/services",
+    key: "Items",
+    name: "Items",
+    path: "/items",
     component: ServicesPage,
   },
   {

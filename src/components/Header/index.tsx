@@ -45,7 +45,7 @@ class NailHeader extends Component<IProps, IState> {
       <Header style={styles.header}>
         <Row>
           <Col lg={6} xs={12}>
-            <Form ref={this.formRef} style={styles.branch.form}>
+            {/* <Form ref={this.formRef} style={styles.branch.form}>
               <Form.Item name="branch" style={styles.branch.formItem}>
                 <Select
                   ref={this.selectRef}
@@ -55,7 +55,7 @@ class NailHeader extends Component<IProps, IState> {
                   {this.renderData()}
                 </Select>
               </Form.Item>
-            </Form>
+            </Form> */}
           </Col>
           <Col lg={12} xs={0}></Col>
           <Col style={styles.rightCol} lg={6} xs={12}>
@@ -77,15 +77,15 @@ class NailHeader extends Component<IProps, IState> {
                 <Avatar size="default" icon={<UserOutlined />} />
               </Button>
             </Dropdown>
-            <Dropdown overlay={<LanguageMenu />} trigger={["click"]}>
+            {/* <Dropdown overlay={<LanguageMenu />} trigger={["click"]}>
               <Button style={{...styles.btnLanguage }}>
                 {this.props.currentLanguage}
               </Button>
-            </Dropdown>
+            </Dropdown> */}
             </Space>
           </Col>
         </Row>
-        <Title level={3} style={styles.title}>{this.renderPathName()}</Title>
+        {/* <Title level={3} style={styles.title}>{this.renderPathName()}</Title> */}
       </Header>
     );
   }

@@ -9,14 +9,14 @@ class ServicesPage extends React.Component {
   render() {
     return (
       <Layout style={style.container}>
-        <Tabs onChange={this._onChangeTab} style={style.tab} type="card">
+        {/* <Tabs onChange={this._onChangeTab} style={style.tab} type="card">
           <TabPane
             tab={I18n.t(_t(translations.services.servicesMenu))}
             key="TabPane1"
-          >
+          > */}
             <ServicesMenu />
-          </TabPane>
-        </Tabs>
+          {/* </TabPane>
+        </Tabs> */}
       </Layout>
     );
   }

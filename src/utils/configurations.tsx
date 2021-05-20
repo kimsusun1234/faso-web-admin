@@ -5,7 +5,7 @@ export const columnChartConfig = {
   seriesField: "status",
   colorField: "status", // or seriesField in some cases
   color: ({ status }: any) => {
-    if (status === "Confirmed") {
+    if (status === "Success") {
       return "#3347ff";
     }
     return "#d60000";

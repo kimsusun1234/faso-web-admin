@@ -22,9 +22,9 @@ export default class AdminRouter extends Component<IRouteComponentProps> {
             <Row>
               <Col lg={9} md={6} xs={1} />
               <Col lg={6} md={12} xs={22}>   
-                <Route path={`${this.props.location.pathname}/login`} component={LoginPage} />
-                <Route path={`${this.props.location.pathname}/forgot`} component={ForgotPage} />
-                <Redirect from="/auth" to="/auth/login" />
+                <Route path={`/login`} component={LoginPage} />
+                {/* <Route path={`${this.props.location.pathname}/forgot`} component={ForgotPage} /> */}
+                <Redirect from="/" to="/login" />
               </Col>
               <Col lg={9} md={6} xs={1} />
             </Row>

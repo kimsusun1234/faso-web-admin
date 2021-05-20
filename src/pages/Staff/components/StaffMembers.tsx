@@ -19,6 +19,7 @@ import {
   RightOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import Axios from 'axios';
 
 interface IStates {
   gridView: boolean;
@@ -26,7 +27,7 @@ interface IStates {
   listData: Array<any>;
 }
 
-interface IProps {}
+interface IProps { }
 
 const { Text } = Typography;
 
@@ -65,19 +66,24 @@ export default class StaffMembers extends Component<IProps, IStates> {
   state = {
     gridView: false,
     searchTerm: "",
-    listData: data,
+    listData: [],
   };
 
   componentDidUpdate(prevProps: IProps, prevState: IStates, snapshot: any) {
-    let results = [];
-    if (prevState.searchTerm !== this.state.searchTerm) {
-      results = data.filter(
-        (e) =>
-          e.name.toLowerCase().includes(this.state.searchTerm) ||
-          e.pos.toLowerCase().includes(this.state.searchTerm)
-      );
-      this.setState({ listData: results });
-    }
+
+  }
+
+  componentDidMount() {
+    this.loadData()
+  }
+
+  async loadData() {
+    const { data } = await Axios({
+      baseURL: 'http://3.136.161.133:3000/api/v1',
+      url: `admin/get-all-users`,
+      method: 'get'
+    });
+    this.setState({listData: data.data})
   }
 
   render() {
@@ -108,17 +114,17 @@ export default class StaffMembers extends Component<IProps, IStates> {
                 onClick={this._onChangeListView}
               />
             </Col>
-            <Input
+            {/* <Input
               allowClear
               prefix={<SearchOutlined />}
               placeholder="Search by name or title"
               style={styles.inputSearch}
               value={this.state.searchTerm}
               onChange={(e) => this.setState({ searchTerm: e.target.value })}
-            />
+            /> */}
           </Space>
         </Col>
-        <Col>
+        {/* <Col>
           <Space direction="horizontal" size="small">
             <Dropdown trigger={["click"]} overlay={this.menu}>
               <Button>
@@ -129,7 +135,7 @@ export default class StaffMembers extends Component<IProps, IStates> {
               New Closed Date
             </Button>
           </Space>
-        </Col>
+        </Col> */}
       </Row>
     );
   };
@@ -140,14 +146,14 @@ export default class StaffMembers extends Component<IProps, IStates> {
       : { column: 1, gutter: 16 };
     const avatarSize = { xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 };
     const url =
-      "https://cdn10.bostonmagazine.com/wp-content/uploads/sites/2/2019/08/eee-social.jpg";
+      "https://otovinh.vn/sites/all/themes/giaidieu/images/hu-images/default-user.png";
     return (
       <Row>
         <Col span={24}>
           <List
             itemLayout="horizontal"
             dataSource={this.state.listData}
-            rowKey={(e) => e.id.toString()}
+            rowKey={(e: any) => e._id.toString()}
             grid={gridView}
             renderItem={(item) => (
               <List.Item
@@ -161,8 +167,8 @@ export default class StaffMembers extends Component<IProps, IStates> {
                   <Col span={20} style={{ display: "flex" }}>
                     <Row style={styles.rowItem} justify="space-between">
                       <Col span={6}>
-                        <h2>{item.name}</h2>
-                        <Text>{item.pos} </Text>
+                        <h3>{item.display_name || item._id}</h3>
+                        {/* <Text>{item.pos} </Text> */}
                       </Col>
                       <Col span={13}>
                         <Text>{item.phone}</Text>

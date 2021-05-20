@@ -18,7 +18,7 @@ export default class MenuSider extends React.Component<IMenuSiderProps> {
         collapsed={this.props.collapsed}
         onCollapse={this.props.onCollapse}
       >
-        <div style={logoStyle} />
+        {/* <div style={logoStyle} /> */}
         <Menu
           theme="dark"
           defaultSelectedKeys={[`${this.props.location.pathname}`]}
@@ -47,7 +47,7 @@ const logoStyle = {
 const iconStyle = { fontSize: '20px' }
 const menuList = [
   { name: 'Dashboard', path: '/dashboard', icon: <DashboardFilled style={iconStyle} /> },
-  { name: 'Staff', path: '/staff', icon: <ContactsFilled style={iconStyle} /> },
-  { name: 'Services', path: '/services', icon: <DatabaseFilled style={iconStyle} /> },
-  { name: 'Calendar', path: '/calendar', icon: <CalendarFilled style={iconStyle} /> }
+  { name: 'User', path: '/users', icon: <ContactsFilled style={iconStyle} /> },
+  { name: 'Item', path: '/items', icon: <DatabaseFilled style={iconStyle} /> },
+  // { name: 'Calendar', path: '/calendar', icon: <CalendarFilled style={iconStyle} /> }
 ]

@@ -1,256 +1,241 @@
-import { Component, CSSProperties } from "react";
+import { Component } from "react";
+import { connect } from 'react-redux';
 import {
-  Button,
   Col,
   Row,
+  Input,
   Space,
-  Collapse,
+  Button,
   Dropdown,
   Menu,
-  Divider,
+  message,
   List,
+  Avatar,
   Typography,
 } from "antd";
-import { EllipsisOutlined, DownloadOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { I18n, _t, translations } from "utils";
-import { IService } from "models/IServices";
-import { RootState } from "redux/configuration/rootReducer";
-import { Dispatch } from "redux";
 import {
-  ServicesActions,
-  CategoryActions,
-  ActionInterfaces,
-} from "redux/actions";
-import { IItemCategory } from "models/IItemCategory";
-import "./style.css";
-import { getServicesByCategory } from "redux/selectors/services";
-import moment from "moment";
+  AppstoreOutlined,
+  BarsOutlined,
+  DownOutlined,
+  RightOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import Axios from 'axios';
+import { RootState } from "redux/configuration/rootReducer";
 
-const { Panel } = Collapse;
+interface IStates {
+  gridView: boolean;
+  searchTerm: string;
+  listData: Array<any>;
+}
+
+interface IProps extends ReturnType<typeof mapStateToProps> { }
+
 const { Text } = Typography;
 
-interface IStates {}
+const data = [
+  {
+    id: 1,
+    name: "Trung",
+    pos: "Technician",
+    phone: "+1 614-772-4672",
+    email: "akajeeeedawdafagfawdwdawaee@gmail.com",
+  },
+  {
+    id: 2,
+    name: "hai",
+    pos: "Hihi",
+    phone: "+1 614-772-4672",
+    email: "akajeeeeee@gmail.com",
+  },
+  {
+    id: 3,
+    name: "hieu",
+    pos: "haha",
+    phone: "+1 614-772-4672",
+    email: "akajeeeeee@gmail.com",
+  },
+  {
+    id: 4,
+    name: "the anh",
+    pos: "Nail Technician",
+    phone: "+1 614-772-4672",
+    email: "akajeeeeee@gmail.com",
+  },
+];
+class StaffMembers extends Component<IProps, IStates> {
+  state = {
+    gridView: false,
+    searchTerm: "",
+    listData: [],
+  };
 
-interface IProps
-  extends ReturnType<typeof mapDispatchToProps>,
-    ReturnType<typeof mapStateToProps> {}
+  componentDidUpdate(prevProps: IProps, prevState: IStates, snapshot: any) {
 
-// interface ICategoryServices {
-//   [key: string]: {
-//     category: IItemCategory;
-//     services: IService[];
-//   };
-// }
-
-class ServicesMenu extends Component<IProps, IStates> {
-  state = {};
-  componentDidMount() {
-    this.props.getServices({
-      userId: "1",
-      shopId: "2",
-    });
-    this.props.getCategory({
-      userId: "1",
-      shopId: "1",
-    });
   }
+
+  componentDidMount() {
+    this.loadData()
+  }
+
+  async loadData() {
+    const { data } = await Axios({
+      baseURL: 'http://3.136.161.133:3000/api/v1',
+      url: `admin/get-all-items`,
+      method: 'get'
+    });
+    this.setState({listData: data.data})
+  }
+
   render() {
     return (
-      <Col span={24} style={styles.container}>
-        <Space direction="vertical" style={styles.spaceContainer} size="small">
-          {this.renderButton()}
-          {this.renderCollapse()}
+      <>
+        <Space direction="vertical" style={styles.container} size="large">
+          {this.renderHeader()}
+          {this.renderList()}
         </Space>
-      </Col>
+      </>
     );
   }
-  renderButton = () => {
+
+  renderHeader = () => {
     return (
-      <Row justify="end">
+      <Row justify="space-between">
         <Col>
           <Space direction="horizontal" size="small">
-            <Dropdown trigger={["click"]} overlay={this.renderMenuExport}>
-              <Button type="default" icon={<DownloadOutlined />}>
-                {I18n.t(_t(translations.services.btnExport))}
-              </Button>
-            </Dropdown>
-            <Dropdown trigger={["click"]} overlay={this.renderMenuAddNew}>
-              <Button type="primary">
-                {I18n.t(_t(translations.services.btnAddNew))}
-              </Button>
-            </Dropdown>
+            <Col>
+              <Button
+                type={!this.state.gridView ? "link" : "text"}
+                icon={<AppstoreOutlined style={styles.icon} />}
+                onClick={this._onChangeListView}
+              />
+              <Button
+                type={this.state.gridView ? "link" : "text"}
+                icon={<BarsOutlined style={styles.iconBars} />}
+                onClick={this._onChangeListView}
+              />
+            </Col>
+            {/* <Input
+              allowClear
+              prefix={<SearchOutlined />}
+              placeholder="Search by name or title"
+              style={styles.inputSearch}
+              value={this.state.searchTerm}
+              onChange={(e) => this.setState({ searchTerm: e.target.value })}
+            /> */}
           </Space>
         </Col>
+        {/* <Col>
+          <Space direction="horizontal" size="small">
+            <Dropdown trigger={["click"]} overlay={this.menu}>
+              <Button>
+                Options <DownOutlined />
+              </Button>
+            </Dropdown>
+            <Button type="primary" onClick={() => alert("1233")}>
+              New Closed Date
+            </Button>
+          </Space>
+        </Col> */}
       </Row>
     );
   };
 
-  renderCollapse = () => {
+  renderList = () => {
+    const gridView = !this.state.gridView
+      ? { column: 2, gutter: 16, xs: 1, sm: 1, md: 1, lg: 1, xl: 2, xxl: 2 }
+      : { column: 1, gutter: 16 };
+    const avatarSize = { xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 };
+    const url =
+      "https://img.icons8.com/ios/452/clothes.png";
     return (
       <Row>
         <Col span={24}>
-          <Collapse
-            defaultActiveKey={["1"]}
-            onChange={(key) => this._onChangeCollapse(key)}
-          >
-            {this.props.category.map((e: IItemCategory) => {
-              return (
-                <Panel header={e.name} key={e.id} extra={this.renderExtra()}>
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={this.props.servicesByCategory(e.id)}
-                    renderItem={this.renderItem}
-                    rowKey={(item) => `key ${item.id}`}
-                  />
-                </Panel>
-              );
-            })}
-          </Collapse>
+          <List
+            loading={this.props.isLoading}
+            itemLayout="horizontal"
+            dataSource={this.state.listData}
+            rowKey={(e: any) => e._id.toString()}
+            grid={gridView}
+            renderItem={(item) => (
+              <List.Item
+                onClick={() => console.log(123)}
+                style={styles.listItem}
+              >
+                <Row style={{ alignItems: "center" }}>
+                  <Col>
+                    <Avatar size={avatarSize} src={item.avatar} />
+                  </Col>
+                  <Col span={20} style={{ display: "flex" }}>
+                    <Row style={styles.rowItem} justify="space-between">
+                      <Col span={6}>
+                        <h3>{item.name || item._id}</h3>
+                        {/* <Text>{item.pos} </Text> */}
+                      </Col>
+                      <Col span={13}>
+                        <Text>Giá: {item.price} đ</Text>
+                        <br />
+                        <Text>Số lượng {item.quantity} </Text>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </List.Item>
+            )}
+          />
         </Col>
       </Row>
     );
   };
 
-  renderItem = (item: IService) => {
-    return (
-      <Link to={`/services/edit/${1}`} onClick={() => {}}>
-        <List.Item style={styles.listItem}>
-          <Col span={10}>
-            <h3>{item.item.name}</h3>
-          </Col>
-
-          <Col span={14} style={{ alignSelf: "center" }}>
-            <Space direction="vertical" size="large">
-              <Col span={24}>
-                <Row justify="space-between">
-                  <Text style={styles.time}>
-                    {moment.unix(item.duration).format("mm")}
-                  </Text>
-                  <Text style={styles.price}>{item.item.price}</Text>
-                </Row>
-              </Col>
-            </Space>
-          </Col>
-
-          <Divider style={styles.divider} />
-        </List.Item>
-      </Link>
-    );
+  _onChangeListView = () => {
+    this.setState({ gridView: !this.state.gridView });
   };
 
-  _onChangeCollapse = (key: any) => {
-    console.log(key);
+  handleMenuClick = (e: any) => {
+    message.info("Click on menu item. " + e);
   };
 
-  renderMenuAddNew = () => (
-    <Menu>
-      <Menu.Item key="menuNewService">
-        <Link to={`/services/addNew`}>
-          {I18n.t(_t(translations.services.menuNewService))}
-        </Link>
-      </Menu.Item>
-      <Divider style={styles.dividerNoMargin} />
-      <Menu.Item key="menuNewCategory" onClick={() => alert("456")}>
-        {I18n.t(_t(translations.services.menuNewCategory))}
-      </Menu.Item>
-    </Menu>
-  );
-
-  renderMenuExport = () => (
-    <Menu>
-      <Menu.Item key="menuPDF" onClick={() => alert("123")}>
-        {I18n.t(_t(translations.services.menuPDF))}
-      </Menu.Item>
-      <Divider style={styles.dividerNoMargin} />
-      <Menu.Item key="menuExcel" onClick={() => alert("456")}>
-        {I18n.t(_t(translations.services.menuExcel))}
-      </Menu.Item>
-      <Divider style={styles.dividerNoMargin} />
-      <Menu.Item key="MenuCSV" onClick={() => alert("789")}>
-        {I18n.t(_t(translations.services.menuCSV))}
-      </Menu.Item>
-    </Menu>
-  );
-
-  renderExtra = () => (
-    <Dropdown trigger={["click"]} overlay={this.renderMenuPanel}>
-      <Button
-        onClick={(event) => event.stopPropagation()}
-        icon={<EllipsisOutlined />}
-      />
-    </Dropdown>
-  );
-
-  renderMenuPanel = () => (
-    <Menu>
-      <Menu.Item key="menuAddService" onClick={() => alert("123")}>
-        {I18n.t(_t(translations.services.menuAddNewServices))}
-      </Menu.Item>
-      <Divider style={styles.dividerNoMargin} />
-      <Menu.Item key="menuEditCate" onClick={() => alert("456")}>
-        {I18n.t(_t(translations.services.menuEditCategory))}
-      </Menu.Item>
-      <Divider style={styles.dividerNoMargin} />
-      <Menu.Item
-        key="menuDeleteCate"
-        onClick={() => alert("789")}
-        style={styles.textDelete}
-      >
-        {I18n.t(_t(translations.services.menuDeleteCategory))}
-      </Menu.Item>
+  menu = (
+    <Menu onClick={this.handleMenuClick}>
+      <Menu.Item key="1">1st menu item</Menu.Item>
+      <Menu.Item key="2">2nd menu item</Menu.Item>
+      <Menu.Item key="3">3rd menu item</Menu.Item>
     </Menu>
   );
 }
 
 const styles = {
   container: {
-    backgroundColor: "white",
-    alignSelf: "center",
+    display: "flex",
     width: "100%",
   },
-  divider: {
-    margin: "16px 0",
+  icon: {
+    fontSize: 28,
   },
-  dividerNoMargin: {
-    margin: 0,
-  },
-  spaceContainer: {
-    display: "block",
-    width: "100%",
-  },
-  textDelete: {
-    color: "red",
+  iconBars: {
+    fontSize: 28,
+    marginInlineEnd: 10,
   },
   listItem: {
-    alignItems: "normal",
+    borderStyle: "ridge",
+    borderRadius: 10,
+    padding: 10,
   },
-
-  time: {
-    color: "#8c8c8c",
+  rowItem: {
+    alignItems: "center",
+    marginLeft: 20,
+    display: "flex",
+    width: "100%",
   },
-  price: {
-    fontWeight: 700,
+  iconRight: {
+    marginLeft: "auto",
   },
+  inputSearch: { width: 500 },
 };
 
 const mapStateToProps = (state: RootState) => ({
-  services: state.ServiceReducer.services,
-  category: state.CategoryReducer.category,
-  servicesByCategory: (categoryId: string) =>
-    getServicesByCategory(state, categoryId),
-});
+  isLoading: state.AppConfigReducer.showLoading
+})
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  getCategory: (data: ActionInterfaces.ICategoryRequest) => {
-    dispatch(CategoryActions.getCategory.request(data));
-  },
-  getServices: (data: ActionInterfaces.IServicesRequest) => {
-    dispatch(ServicesActions.getServices.request(data));
-  },
-  selectService: (service: IService) =>
-    dispatch(ServicesActions.selectService.request(service)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServicesMenu);
+export default connect(mapStateToProps)(StaffMembers)

@@ -16,28 +16,29 @@ class StaffPage extends React.Component {
           backgroundColor: "white",
         }}
       >
-        {this.renderTabs()}
+        {/* {this.renderTabs()} */}
+        <StaffMembers />
       </Layout>
     );
   }
-  renderTabs() {
-    function _onChangeTab(key: string) {
-      console.log(key);
-    }
-    return (
-      <Tabs onChange={_onChangeTab} style={{ margin: "0px" }} type="card">
-        <TabPane tab="Staff Working Hours" key="Tab1">
-          <WorkingHours />
-        </TabPane>
-        <TabPane tab="Closed Dates" key="Tab2">
-          <ClosedDates />
-        </TabPane>
-        <TabPane tab="Staff Member" key="Tab3">
-          <StaffMembers />
-        </TabPane>
-      </Tabs>
-    );
-  }
+//   renderTabs() {
+//     function _onChangeTab(key: string) {
+//       console.log(key);
+//     }
+//     return (
+//       <Tabs onChange={_onChangeTab} style={{ margin: "0px" }} type="card">
+//         <TabPane tab="Staff Working Hours" key="Tab1">
+//           <WorkingHours />
+//         </TabPane>
+//         <TabPane tab="Closed Dates" key="Tab2">
+//           <ClosedDates />
+//         </TabPane>
+//         <TabPane tab="Staff Member" key="Tab3">
+//           <StaffMembers />
+//         </TabPane>
+//       </Tabs>
+//     );
+//   }
 }
 
 export default StaffPage;

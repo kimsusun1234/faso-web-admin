@@ -40,7 +40,7 @@ class Login extends Component<IProps, IState> {
     return (
       <Form ref={this.formRef} name="normal_login" style={styles.nailForm}>
         <Title level={3}>{I18n.t(_t(translations.login.loginTitle))}</Title>
-        {this.props.error?.message ? (
+        {this.props.error ? (
           <Alert
             style={styles.alert}
             message={this.props.error.message}
@@ -93,7 +93,7 @@ class Login extends Component<IProps, IState> {
       const data = JSON.parse(savedLoginData) as ActionInterfaces.ILoginRequest;
       console.log(data);
       this.setState({
-        username: data.userName!,
+        username: data.userNameOrEmail!,
         password: data.password,
         isRemember: data.rememberMe,
       });
@@ -103,10 +103,9 @@ class Login extends Component<IProps, IState> {
   onBtnClickHandle = () => {
     this.props.clearError();
     if (this.validate()) {
-      const data: ActionInterfaces.ILoginRequest = {
-        userName: this.state.username,
+      const data = {
+        phone: this.state.username,
         password: this.state.password,
-        rememberMe: this.state.isRemember,
       };
       this.props.login(data);
     }
@@ -200,11 +199,11 @@ class Login extends Component<IProps, IState> {
 
 const mapStateToProps = (state: RootState) => ({
   isLoading: state.AppConfigReducer.showLoading,
-  error: state.UserReducer.error,
+  error: state.AuthenticationReducer.error,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  login: (data: ActionInterfaces.ILoginRequest) => {
+  login: (data: any) => {
     dispatch(AuthenticationActions.authenticate.request(data));
   },
   dispatchError: (error: Error) => {

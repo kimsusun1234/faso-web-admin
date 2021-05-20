@@ -5,7 +5,7 @@ export interface IServicesRequest {
 
 export interface ILoginRequest {
   email?: string;
-  userName?: string;
+  userNameOrEmail?: string;
   password: string;
   rememberMe: boolean;
 }

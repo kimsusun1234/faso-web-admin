@@ -1,11 +1,14 @@
 import React from "react";
 import { Col, Row, Avatar, Menu, Typography } from "antd";
 import {  UserOutlined } from "@ant-design/icons";
+import { Dispatch } from 'redux'
+import { connect } from 'react-redux'
 import { I18n, _t, translations } from "utils";
 import styles from './styles';
+import { AuthenticationActions } from "redux/actions";
 const { Title, Link } = Typography;
 
-interface IProps {
+interface IProps extends ReturnType<typeof mapDispatchToProps> {
   user: any
 }
 
@@ -13,7 +16,7 @@ const menus: string[] = [
   I18n.t(_t(translations.profileMenu.notiSetting)),
   I18n.t(_t(translations.profileMenu.contactSupport)),
   I18n.t(_t(translations.profileMenu.helpCenter)),
-  I18n.t(_t(translations.profileMenu.logout))
+  
 ]
 
 const ProfileMenu = (props: IProps) => (
@@ -31,6 +34,10 @@ const ProfileMenu = (props: IProps) => (
     </Row>
     <Menu.Divider />
     {renderMenuItem()}
+    <Menu.Item key={3} style={styles.menuItem} onClick={() => props.logout()}>
+      {I18n.t(_t(translations.profileMenu.logout))}
+    </Menu.Item>
+    
   </Menu>
 )
 
@@ -42,4 +49,10 @@ const renderMenuItem =() => {
   ))
 }
 
-export default ProfileMenu;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  logout: () => {
+    dispatch(AuthenticationActions.logout.request())
+  }
+})
+
+export default connect(null, mapDispatchToProps)(ProfileMenu);

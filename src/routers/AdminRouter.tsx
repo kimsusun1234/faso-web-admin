@@ -30,7 +30,8 @@ export default class AdminRouter extends React.Component<IRouteComponentProps> {
   render() {
     console.log('WAAAA',window.innerWidth)
     return (
-      <Layout style={{ minHeight: "100vh" }}>
+      <Router>
+        <Layout style={{ minHeight: "100vh" }}>
         {window.innerWidth > 768 ?
         <MenuSider
           collapsed={this.state.collapsed}
@@ -40,26 +41,26 @@ export default class AdminRouter extends React.Component<IRouteComponentProps> {
         <Layout>
           <Header />
           <Content style={styles.contentContainer}>
-            <Switch>
+            {/* <Switch> */}
+            {/* <Redirect exact from="/" to="/dashboard" /> */}
               {HomeRoute.map((route) => {
                 return (
                   <Route
-                    exact
                     path={route.path}
                     component={route.component}
                     key={route.key}
                   />
                 );
               })}
-              {/* <Route exact path="/" />
-              <Redirect to="/" from="/login" />
-              <Redirect to="/dashboard" from="/" /> */}
-            </Switch>
+              {/* <Route exact path="/" /> */}
+              {/* <Redirect to="/" from="/login" /> */}
+            {/* </Switch> */}
           </Content>
         </Layout>
         <NotificationDrawer />
         {window.innerWidth <= 768 ? <MenuTab location={this.props.location}/> : null }
       </Layout>
+      </Router>
     );
   }
 }
