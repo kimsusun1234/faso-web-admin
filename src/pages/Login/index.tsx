@@ -118,7 +118,7 @@ class Login extends Component<IProps, IState> {
           <Input
             ref={this.userRef}
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder={I18n.t(_t(translations.login.loginEmail))}
+            placeholder={"Phone number"}
             onChange={(event) =>
               this.setState({ username: event.target.value })
             }
