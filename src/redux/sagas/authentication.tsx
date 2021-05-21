@@ -38,7 +38,7 @@ function myLogin(phone: string, password: string) {
     try {
       const {data} = await Axios({
         method: 'post',
-        url: 'http://192.168.0.102:3000/api/v1/admin/login',
+        url: 'http://3.136.161.133:3000/api/v1/admin/login',
         data: {
           phone_number: reformatPhone, 
           password: password
